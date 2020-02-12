@@ -19,5 +19,5 @@ window.addEventListener('keydown', function (e) {
 window.addEventListener('keyup', function (e) {
   Keyboarder.keyState[e.keyCode] = false
 })
-
+// CODES THAT CORRESPOND TO KEYBOARD KEYS
 Keyboarder.KEYS = { LEFT: 37, RIGHT: 39, UP: 38, DOWN: 40, S: 83 }
