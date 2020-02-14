@@ -23,14 +23,13 @@ class Game {
   update () {
     this.player.update()
     this.enemy.update()
-    if (colliding (this.player, this.enemy)) {
-      console.log("colliding")
+    if (colliding(this.player, this.enemy)) {
+      console.log('colliding')
       addMessage()
     }
 
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
       this.enemy.radius += this.enemyGrow
-      
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
       this.enemy.radius += this.enemyGrow
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
@@ -38,15 +37,13 @@ class Game {
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
       this.enemy.radius += this.enemyGrow
     }
-
   }
-  
+
 
   draw (screen, gameSize) {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
-    drawRect(screen, this.player)
+    drawCircle(screen, this.player)
     drawCircle(screen, this.enemy)
-
 
     // for (let i = 0; i < this.bodies.length; i++) {
     //   drawRect(screen, this.bodies[i])
@@ -75,28 +72,26 @@ class Enemy {
     // this.center.x = Math.floor(Math.random * this.gameSize.x)
     // this.center.x += Math.random() * this.velocity * posOrNeg()
     // this.center.y += Math.random() * this.velocity * posOrNeg()
-    // this.radius += this.velocity
+    // this.center.x += this.velocity
     if (this.center.x < 0 || this.center.x > this.gameSize.x) {
       this.center.x *= -1
-      }
-    if (this.center.y < 0 || this.center.y> this.gameSize.y) {
+    }
+    if (this.center.y < 0 || this.center.y > this.gameSize.y) {
       this.center.y *= -1
     }
-  
 
-    
-    
+
+
+
     // console.log(this.center.x)
     // this.moveX += this.speedX
     // console.log(this.moveX)
 
-    
     // this.center.x = Math.floor(Math.random * this.gameSize.x)
     // this.center.x += this.speedX
     // this.moveX += this.speedX
   }
 }
-
 
 // function spawn (game) {
 //   const enemies = []
@@ -112,6 +107,7 @@ class Player {
   constructor (game, gameSize) {
     this.game = game
     this.size = { x: 40, y: 40 }
+    this.radius = this.size.x / 2
     this.center = { x: gameSize.x - this.size.x, y: gameSize.y - this.size.y }
     this.gameSize = gameSize
     this.keyboarder = Keyboarder
@@ -171,17 +167,17 @@ function posOrNeg () {
 }
 
 function addMessage () {
-  let headline = document.querySelector('#game-headline')
-  let container = document.querySelector('.container')
-  headline.innerHTML = ""
-  let tagline = document.createElement('h1')
+  const headline = document.querySelector('#game-headline')
+  const container = document.querySelector('.container')
+  headline.innerHTML = ''
+  const tagline = document.createElement('h1')
   tagline.innerHTML = 'NOW YOU ARE THE ABYSS'
   headline.appendChild(tagline)
 }
 
 function drawMessage (screen, message) {
-  screen.font = "30px Arial"
-  screen.fillText("message", 250, 250)
+  screen.font = '30px Arial'
+  screen.fillText('message', 250, 250)
 }
 // function create
 
