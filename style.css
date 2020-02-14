@@ -11,5 +11,7 @@
 
 #game-board {
   background-color: rgb(201, 186, 186);
+  border: 10px solid black;
+  border-radius: 10px;
 
 }

@@ -6,6 +6,8 @@ class Game {
     this.size = gameSize.x
     this.player = new Player(this, gameSize)
     this.enemy = new Enemy(this, gameSize)
+    this.keyboarder = Keyboarder
+    this.enemyGrow = 1
     // this.bodies = []
     // this.bodies = this.bodies.concat(spawn(this))
     // this.bodies = this.bodies.concat(new Player(this, gameSize))
@@ -21,20 +23,30 @@ class Game {
   update () {
     this.player.update()
     this.enemy.update()
-    // if (this.enemy.radius > 700) {
-    //   console.log('Now you are the abyss')
-    //   addMessage()
-    //  }
-   
-    // for (let i = 0; i < this.bodies.length; i++) {
-    //   this.bodies[i].update()
-    // }
+    if (colliding (this.player, this.enemy)) {
+      console.log("colliding")
+      addMessage()
+    }
+
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
+      this.enemy.radius += this.enemyGrow
+      
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
+      this.enemy.radius += this.enemyGrow
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+      this.enemy.radius += this.enemyGrow
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
+      this.enemy.radius += this.enemyGrow
+    }
+
   }
+  
 
   draw (screen, gameSize) {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
     drawRect(screen, this.player)
-    drawRect(screen, this.enemy)
+    drawCircle(screen, this.enemy)
+
 
     // for (let i = 0; i < this.bodies.length; i++) {
     //   drawRect(screen, this.bodies[i])
@@ -54,22 +66,20 @@ class Enemy {
     this.center = { x: this.size.x, y: this.size.y }
     this.gameSize = gameSize
     this.moveX = 0
-    this.speedX = Math.random() * 3
-    this.moveY = 0
-    this.speedY = Math.random() * 3
+    this.velocity = 1.5
 
     // this.keyboarder = new Keyboarder
   }
 
   update () {
     // this.center.x = Math.floor(Math.random * this.gameSize.x)
-    this.center.x += Math.random() * this.velocity
-    this.center.y += Math.random() * this.velocity
+    // this.center.x += Math.random() * this.velocity * posOrNeg()
+    // this.center.y += Math.random() * this.velocity * posOrNeg()
     // this.radius += this.velocity
     if (this.center.x < 0 || this.center.x > this.gameSize.x) {
       this.center.x *= -1
       }
-    if (this.center.y < 0 || this.center.y > this.gameSize.y) {
+    if (this.center.y < 0 || this.center.y> this.gameSize.y) {
       this.center.y *= -1
     }
   
@@ -125,6 +135,16 @@ class Player {
 }
 
 // XXXXXXXXXXXXXXXXX
+
+function colliding (b1, b2) {
+  return !(
+    b1 === b2 ||
+      b1.center.x + b1.size.x / 2 < b2.center.x - b2.radius ||
+      b1.center.y + b1.size.y / 2 < b2.center.y - b2.radius ||
+      b1.center.x - b1.size.x / 2 > b2.center.x + b2.radius ||
+      b1.center.y - b1.size.y / 2 > b2.center.y + b2.radius
+  )
+}
 
 function drawRect (screen, body) {
   screen.fillRect(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2,
