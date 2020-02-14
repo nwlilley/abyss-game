@@ -7,7 +7,7 @@ class Game {
     this.player = new Player(this, gameSize)
     this.enemy = new Enemy(this, gameSize)
     this.keyboarder = Keyboarder
-    this.enemyGrow = 1
+    this.enemyGrow = 3
     // this.bodies = []
     // this.bodies = this.bodies.concat(spawn(this))
     // this.bodies = this.bodies.concat(new Player(this, gameSize))
@@ -45,6 +45,7 @@ class Game {
   draw (screen, gameSize) {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
     drawRect(screen, this.player)
+  
     drawCircle(screen, this.enemy)
 
 
@@ -66,7 +67,7 @@ class Enemy {
     this.center = { x: this.size.x, y: this.size.y }
     this.gameSize = gameSize
     this.moveX = 0
-    this.velocity = 1.5
+    // this.velocity = 10
 
     // this.keyboarder = new Keyboarder
   }
