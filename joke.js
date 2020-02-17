@@ -7,7 +7,7 @@ class Game {
     this.player = new Player(this, gameSize)
     this.enemy = new Enemy(this, gameSize)
     this.keyboarder = Keyboarder
-    this.enemyGrow = 1
+    this.enemyGrow = .3
     // this.bodies = []
     // this.bodies = this.bodies.concat(spawn(this))
     // this.bodies = this.bodies.concat(new Player(this, gameSize))
@@ -23,8 +23,8 @@ class Game {
   update () {
     this.player.update()
     this.enemy.update()
-    distance(this.player, this.enemy)
-    if (colliding(this.player, this.enemy)) {
+    // distance(this.player, this.enemy)
+    if (distance(this.player, this.enemy)) {
       console.log('colliding')
       addMessage()
     }
@@ -63,23 +63,37 @@ class Enemy {
     this.radius = 25
     this.center = { x: 50, y: 50}
     this.gameSize = gameSize
-    this.moveX = 0
-    this.velocity = 1.5
+    this.patrolX = 0
+    this.patrolY = 0 
+    this.speedX = 2
+    this.speedY = 2
 
     // this.keyboarder = new Keyboarder
   }
 
   update () {
+    if (this.patrolX < 0 || this.patrolX > this.gameSize.x - this.size.x) {
+      this.speedX = -this.speedX
+      this.speedY = -(Math.random() * this.speedY)
+    }
+    
+    if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
+      this.speedY = -this.speedY
+      this.speedX = -(Math.random() * this.speedX)
+    }
+    this.center.x += this.speedX
+    this.center.y += this.speedY
+    this.patrolX += this.speedX
+
+
+
+    
     // this.center.x = Math.floor(Math.random * this.gameSize.x)
     // this.center.x += Math.random() * this.velocity * posOrNeg()
     // this.center.y += Math.random() * this.velocity * posOrNeg()
     // this.center.x += this.velocity
-    // if (this.center.x < 0 || this.center.x > this.gameSize.x) {
-    //   this.center.x *= -1
-    // }
-    // if (this.center.y < 0 || this.center.y > this.gameSize.y) {
-    //   this.center.y *= -1
-    // }
+    
+    }
 
 
 
@@ -92,7 +106,7 @@ class Enemy {
     // this.center.x += this.speedX
     // this.moveX += this.speedX
   }
-}
+
 
 // function spawn (game) {
 //   const enemies = []
@@ -138,13 +152,18 @@ function distance (player, enemy) {
   let pos1 = Math.abs(player.center.x - enemy.center.x)
   let pos2 = Math.abs(player.center.y - enemy.center.y)
   let hypotenuse = Math.sqrt(pos1 ** 2 + pos2 ** 2)
-  console.log(hypotenuse)
-  return hypotenuse
+  console.log(hypotenuse )
+  if (hypotenuse <= player.radius + enemy.radius) {
+    console.log("colliding")
+    return true
+  }
 }
 
 function colliding (player, enemy) {
   if (distance (player, enemy) <= player.radius + enemy.radius)
-    console.log('baby butt')// console.log(enemy.radius)
+    console.log('baby butt')
+    return true
+    // console.log(enemy.radius)
   // console.log('distance x: ' + distX)
   // console.log('distance y: ' + distY)
   
@@ -168,7 +187,7 @@ function drawCircle (screen, body) {
   screen.beginPath()
   screen.arc(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2, body.radius, 0, Math.PI * 2, true)
   screen.stroke()
-  // screen.fill()
+  screen.fill()
 }
 
 function getRandInt (min, max) {
