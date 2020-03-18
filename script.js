@@ -45,15 +45,7 @@ class Game {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
     drawCircle(screen, this.player)
     drawCircle(screen, this.enemy)
-
-    // for (let i = 0; i < this.bodies.length; i++) {
-    //   drawRect(screen, this.bodies[i])
-    // }
   }
-
-  // addBody (body) {
-  //   this.bodies.push(body)
-  // }
 }
 
 class Enemy {
@@ -65,7 +57,7 @@ class Enemy {
     this.center = { x: 50, y: 50}
     this.gameSize = gameSize
     this.patrolX = 0
-    this.patrolY = 0 
+    this.patrolY = 0
     this.speedX = 2
     this.speedY = 2
 
@@ -128,24 +120,6 @@ function distance (player, enemy) {
     return true
   }
 }
-
-function colliding (player, enemy) {
-  if (distance (player, enemy) <= player.radius + enemy.radius)
-    console.log('baby butt')
-    return true
-    // console.log(enemy.radius)
-  // console.log('distance x: ' + distX)
-  // console.log('distance y: ' + distY)
-  
-  // return !(
-  //   b1 === b2 ||
-  //     b1.center.x + b1.size.x / 2 < b2.center.x - b2.radius ||
-  //     b1.center.y + b1.size.y / 2 < b2.center.y - b2.radius ||
-  //     b1.center.x - b1.size.x / 2 > b2.center.x + b2.radius ||
-  //     b1.center.y - b1.size.y / 2 > b2.center.y + b2.radius
-  // )
-}
-
 
 
 function drawRect (screen, body) {
