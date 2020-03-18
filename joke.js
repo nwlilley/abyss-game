@@ -7,7 +7,7 @@ class Game {
     this.player = new Player(this, gameSize)
     this.enemy = new Enemy(this, gameSize)
     this.keyboarder = Keyboarder
-    this.enemyGrow = .3
+    this.enemyGrow = .5
     // this.bodies = []
     // this.bodies = this.bodies.concat(spawn(this))
     // this.bodies = this.bodies.concat(new Player(this, gameSize))
@@ -129,17 +129,17 @@ class Player {
   }
 
   update () {
-    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.center.x > (0 + this.radius * 2))) {
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.center.x > (this.radius * 2))) {
       this.center.x -= 2
       // console.log('left')
       // console.log (this.center)
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.center.x < this.gameSize.x - this.radius)) {
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.center.x < this.gameSize.x)) {
       this.center.x += 2
       // console.log('right')
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.center.y > (0 + this.size.x / 2))) {
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.center.y > (0 + this.size.x))) {
       this.center.y -= 2
       // console.log('up')
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.center.y < (this.gameSize.y - this.size.y / 2))) {
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.center.y < (this.gameSize.y))) {
       this.center.y += 2
       // console.log('down')
     }
