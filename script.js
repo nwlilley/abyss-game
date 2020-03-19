@@ -8,7 +8,7 @@ class Game {
     this.enemy = new Enemy(this, gameSize)
     this.keyboarder = Keyboarder
     this.enemyGrow = .5
-    this.updatedRadius = this.enemy.radius
+    // this.updatedRadius = this.enemy.radius
   
 
     const tick = () => {
@@ -24,7 +24,7 @@ class Game {
     this.enemy.update()
     // distance(this.player, this.enemy)
     if (distance(this.player, this.enemy)) {
-      console.log('colliding')
+      // console.log('colliding')
       addMessage()
     }
 
@@ -58,25 +58,32 @@ class Enemy {
     this.gameSize = gameSize
     this.patrolX = 0
     this.patrolY = 0
-    this.speedX = 2
+    this.speedX = 3
     this.speedY = 2
 
     // this.keyboarder = new Keyboarder
   }
   
   update () {
-    if (this.patrolX < 0 || this.patrolX > this.gameSize.x - this.radius) {
+    if (this.patrolX + this.speedX < (this.radius - (this.size.x/2)) || this.patrolX + this.speedX > this.gameSize.x - (this.size.x + (this.radius - (this.size.x/2)))) {
+      console.log('Radius: ' + this.radius)
+      console.log('PatrolX: ' + this.patrolX)
       this.speedX = -this.speedX
-      this.speedY = -(Math.random() * this.speedY)
-    }
-    
-    if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
+      this.speedY = -(Math.random() * this.speedY ) 
+    } 
+
+    if (this.patrolY < (this.radius - (this.size.y/2)) || this.patrolY > this.gameSize.y - (this.size.y + (this.radius - (this.size.y/2)))) {
+    // if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
       this.speedY = -this.speedY
       this.speedX = -(Math.random() * this.speedX)
     }
+
     this.center.x += this.speedX
     this.center.y += this.speedY
-    this.patrolX += this.speedX
+    // what this???
+    this.patrolX += this.speedX 
+    this.patrolY += this.speedY
+
     }
   }
 
@@ -116,7 +123,7 @@ function distance (player, enemy) {
   let hypotenuse = Math.sqrt(pos1 ** 2 + pos2 ** 2)
   // console.log(hypotenuse )
   if (hypotenuse <= player.radius + enemy.radius) {
-    console.log("colliding")
+    // console.log("colliding")
     return true
   }
 }
