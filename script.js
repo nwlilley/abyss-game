@@ -6,9 +6,10 @@ class Game {
     this.size = gameSize.x
     this.player = new Player(this, gameSize)
     this.enemy = new Enemy(this, gameSize)
-    // this.bodies = []
-    // this.bodies = this.bodies.concat(spawn(this))
-    // this.bodies = this.bodies.concat(new Player(this, gameSize))
+    this.keyboarder = Keyboarder
+    this.enemyGrow = .5
+    // this.updatedRadius = this.enemy.radius
+  
 
     const tick = () => {
       this.update()
@@ -21,110 +22,112 @@ class Game {
   update () {
     this.player.update()
     this.enemy.update()
-    // if (this.enemy.radius > 700) {
-    //   console.log('Now you are the abyss')
-    //   addMessage()
-    //  }
-   
-    // for (let i = 0; i < this.bodies.length; i++) {
-    //   this.bodies[i].update()
-    // }
+    // distance(this.player, this.enemy)
+    if (distance(this.player, this.enemy)) {
+      // console.log('colliding')
+      addMessage()
+    }
+
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
+      this.enemy.radius += this.enemyGrow
+
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
+      this.enemy.radius += this.enemyGrow
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+      this.enemy.radius += this.enemyGrow
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
+      this.enemy.radius += this.enemyGrow
+    }
   }
+
 
   draw (screen, gameSize) {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
-    drawRect(screen, this.player)
-    drawRect(screen, this.enemy)
-
-    // for (let i = 0; i < this.bodies.length; i++) {
-    //   drawRect(screen, this.bodies[i])
-    // }
+    drawCircle(screen, this.player)
+    drawCircle(screen, this.enemy)
   }
-
-  // addBody (body) {
-  //   this.bodies.push(body)
-  // }
 }
 
 class Enemy {
   constructor (game, gameSize) {
     this.game = game
     this.size = { x: 50, y: 50 }
-    this.radius = this.size.x / 2
-    this.center = { x: this.size.x, y: this.size.y }
+    this.radius = 25
+    this.updatedRadius = 
+    this.center = { x: 50, y: 50}
     this.gameSize = gameSize
-    this.moveX = 0
-    this.speedX = Math.random() * 3
-    this.moveY = 0
-    this.speedY = Math.random() * 3
+    this.patrolX = 0
+    this.patrolY = 0
+    this.speedX = 3
+    this.speedY = 2
 
     // this.keyboarder = new Keyboarder
   }
-
-  update () {
-    // this.center.x = Math.floor(Math.random * this.gameSize.x)
-    this.center.x += Math.random() * this.velocity
-    this.center.y += Math.random() * this.velocity
-    // this.radius += this.velocity
-    if (this.center.x < 0 || this.center.x > this.gameSize.x) {
-      this.center.x *= -1
-      }
-    if (this.center.y < 0 || this.center.y > this.gameSize.y) {
-      this.center.y *= -1
-    }
   
+  update () {
+    if (this.patrolX + this.speedX < (this.radius - (this.size.x/2)) || this.patrolX + this.speedX > this.gameSize.x - (this.size.x + (this.radius - (this.size.x/2)))) {
+      console.log('Radius: ' + this.radius)
+      console.log('PatrolX: ' + this.patrolX)
+      this.speedX = -this.speedX
+      this.speedY = -(Math.random() * this.speedY ) 
+    } 
 
-    
-    
-    // console.log(this.center.x)
-    // this.moveX += this.speedX
-    // console.log(this.moveX)
+    if (this.patrolY < (this.radius - (this.size.y/2)) || this.patrolY > this.gameSize.y - (this.size.y + (this.radius - (this.size.y/2)))) {
+    // if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
+      this.speedY = -this.speedY
+      this.speedX = -(Math.random() * this.speedX)
+    }
 
-    
-    // this.center.x = Math.floor(Math.random * this.gameSize.x)
-    // this.center.x += this.speedX
-    // this.moveX += this.speedX
+    this.center.x += this.speedX
+    this.center.y += this.speedY
+    // what this???
+    this.patrolX += this.speedX 
+    this.patrolY += this.speedY
+
+    }
   }
-}
-
-
-// function spawn (game) {
-//   const enemies = []
-//   for (let i = 0; i < 1; i++) {
-//     const x = Math.random() * 500
-//     const y = Math.random() * 500
-//     enemies.push(new Enemy(game, { x: x, y: y }))
-//   }
-//   return enemies
-// }
 
 class Player {
   constructor (game, gameSize) {
     this.game = game
     this.size = { x: 40, y: 40 }
-    this.center = { x: gameSize.x - this.size.x, y: gameSize.y - this.size.y }
+    this.radius = 20
+    this.center = { x: gameSize.x, y: gameSize.y }
     this.gameSize = gameSize
     this.keyboarder = Keyboarder
   }
 
   update () {
-    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.center.x > (0 + this.size.x / 2))) {
-      this.center.x -= 3
-      console.log('left')
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.center.x < this.gameSize.x - this.size.x / 2)) {
-      this.center.x += 3
-      console.log('right')
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.center.y > (0 + this.size.x / 2))) {
-      this.center.y -= 3
-      console.log('up')
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.center.y < (this.gameSize.y - this.size.y / 2))) {
-      this.center.y += 3
-      console.log('down')
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.center.x > (this.radius * 2))) {
+      this.center.x -= 2
+      // console.log('left')
+      // console.log (this.center)
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.center.x < this.gameSize.x)) {
+      this.center.x += 2
+      // console.log('right')
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.center.y > (0 + this.size.x))) {
+      this.center.y -= 2
+      // console.log('up')
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.center.y < (this.gameSize.y))) {
+      this.center.y += 2
+      // console.log('down')
     }
   }
 }
 
 // XXXXXXXXXXXXXXXXX
+
+function distance (player, enemy) {
+  let pos1 = Math.abs(player.center.x - enemy.center.x)
+  let pos2 = Math.abs(player.center.y - enemy.center.y)
+  let hypotenuse = Math.sqrt(pos1 ** 2 + pos2 ** 2)
+  // console.log(hypotenuse )
+  if (hypotenuse <= player.radius + enemy.radius) {
+    // console.log("colliding")
+    return true
+  }
+}
+
 
 function drawRect (screen, body) {
   screen.fillRect(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2,
@@ -132,7 +135,9 @@ function drawRect (screen, body) {
 }
 
 function drawCircle (screen, body) {
+  screen.beginPath()
   screen.arc(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2, body.radius, 0, Math.PI * 2, true)
+  screen.stroke()
   screen.fill()
 }
 
@@ -151,17 +156,17 @@ function posOrNeg () {
 }
 
 function addMessage () {
-  let headline = document.querySelector('#game-headline')
-  let container = document.querySelector('.container')
-  headline.innerHTML = ""
-  let tagline = document.createElement('h1')
+  const headline = document.querySelector('#game-headline')
+  const container = document.querySelector('.container')
+  headline.innerHTML = ''
+  const tagline = document.createElement('h1')
   tagline.innerHTML = 'NOW YOU ARE THE ABYSS'
   headline.appendChild(tagline)
 }
 
 function drawMessage (screen, message) {
-  screen.font = "30px Arial"
-  screen.fillText("message", 250, 250)
+  screen.font = '30px Arial'
+  screen.fillText('message', 250, 250)
 }
 // function create
 
