@@ -7,8 +7,8 @@
 
 body {
   background-image: url(http://www.oogazone.com/wp-content/uploads/2019/03/top-stock-illustration-seamless-pattern-with-chaotic-dots-photos.jpg);
-  
-  
+  background-image: url("https://www.publicdomainpictures.net/pictures/330000/velka/random-circle-halftonespeckledots-1585989824k2G.jpg");
+  background-position: 50% 10%;
 }
 
 .header {

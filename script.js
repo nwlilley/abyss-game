@@ -8,7 +8,7 @@ class Game {
     this.player = new Player(this, this.gameSize)
     this.enemy = new Enemy(this, this.gameSize)
     this.keyboarder = Keyboarder
-    this.enemyGrow = 0.5
+    this.enemyGrow = 1.5
     // this.updatedRadius = this.enemy.radius
 
     const tick = () => {
@@ -88,24 +88,21 @@ class Enemy {
     this.game = game
     this.size = { x: 50, y: 50 }
     this.radius = 25
-    this.updatedRadius = 
-    this.center = { x: 50, y: 50}
+    this.center = { x: 50, y: 50 }
     this.gameSize = gameSize
     this.patrolX = 0
     this.patrolY = 0
-    this.speedX = 3
-    this.speedY = 2
+    this.speedX = this.game.player.speed
+    this.speedY = this.game.player.speed
 
     // this.keyboarder = new Keyboarder
   }
   
   update () {
-    if (this.patrolX + this.speedX < (this.radius - (this.size.x/2)) || this.patrolX + this.speedX > this.gameSize.x - (this.size.x + (this.radius - (this.size.x/2)))) {
-      console.log('Radius: ' + this.radius)
-      console.log('PatrolX: ' + this.patrolX)
+    if (this.patrolX + this.speedX < (this.radius - (this.size.x/2)) || this.patrolX + this.speedX > this.gameSize.x - (this.size.x + (this.radius - (this.size.x / 2)))) {
       this.speedX = -this.speedX
-      this.speedY = -(Math.random() * this.speedY ) 
-    } 
+      this.speedY = -(Math.random() * this.speedY)
+    }
 
     if (this.patrolY < (this.radius - (this.size.y / 2)) || this.patrolY > this.gameSize.y - (this.size.y + (this.radius - (this.size.y / 2)))) {
     // if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
@@ -116,7 +113,7 @@ class Enemy {
     this.center.x += this.speedX
     this.center.y += this.speedY
     // what this???
-    this.patrolX += this.speedX 
+    this.patrolX += this.speedX
     this.patrolY += this.speedY
 
     }
@@ -129,22 +126,23 @@ class Player {
     this.radius = 20
     this.center = { x: gameSize.x, y: gameSize.y }
     this.gameSize = gameSize
+    this.speed = 5
     this.keyboarder = Keyboarder
   }
 
   update () {
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.center.x > (this.radius * 2))) {
-      this.center.x -= 2
+      this.center.x -= this.speed
       // console.log('left')
       // console.log (this.center)
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.center.x < this.gameSize.x)) {
-      this.center.x += 2
+      this.center.x += this.speed
       // console.log('right')
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.center.y > (0 + this.size.x))) {
-      this.center.y -= 2
+      this.center.y -= this.speed
       // console.log('up')
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.center.y < (this.gameSize.y))) {
-      this.center.y += 2
+      this.center.y += this.speed
       // console.log('down')
     }
   }
