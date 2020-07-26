@@ -15,9 +15,11 @@ class Game {
       this.update()
       if (!this.gameOver) {
         this.draw(this.screen, this.gameSize)
+        unBlackout()
         requestAnimationFrame(tick)
       } else {
         cancelAnimationFrame(tick)
+        blackout()
         this.gameOverMessage()
         this.restart()
       }
@@ -65,7 +67,9 @@ class Game {
     this.screen.fillText('ARE', textStart, 260)
     this.screen.fillText('THE ABYSS', textStart, 340)
     this.screen.font = '1.5rem sans-serif'
-    this.screen.fillText('Press enter to play again', textStart, 420)
+    this.screen.fillText('Press enter to play again', textStart, 400)
+    this.screen.font = '.8rem serif'
+    this.screen.fillText('Copyright 2020 Endless Abyss Industries ', textStart, 480)
   }
 
   restart () {
@@ -181,6 +185,20 @@ function posOrNeg () {
   }
 }
 
+function blackout () {
+  const header = document.querySelector('.header')
+  const body = document.querySelector('body')
+  header.classList.add('remove')
+  body.classList.add('blackout')
+}
+
+function unBlackout () {
+  const header = document.querySelector('.header')
+  const body = document.querySelector('body')
+  header.classList.remove('remove')
+  body.classList.remove('blackout')
+}
+
 function addMessage () {
   const headline = document.querySelector('#game-headline')
   const container = document.querySelector('.container')
@@ -188,6 +206,7 @@ function addMessage () {
   const tagline = document.createElement('h1')
   tagline.innerHTML = 'NOW YOU ARE THE ABYSS'
   headline.appendChild(tagline)
+
 }
 
 function drawMessage (screen, message) {
