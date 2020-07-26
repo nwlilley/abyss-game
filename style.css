@@ -5,13 +5,44 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.container {
-  margin: 0 auto;
+body {
+  background-image: url(http://www.oogazone.com/wp-content/uploads/2019/03/top-stock-illustration-seamless-pattern-with-chaotic-dots-photos.jpg);
 }
 
+.header {
+  background-color: white;
+  /* color: white; */
+  padding: 1rem;
+  border: solid 10px black;
+  border-radius: 10px;
+
+  width: 400px;
+  text-align: center;
+  margin: 50px, auto;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, -50%);
+
+}
+
+.header__title {
+  font-weight: 600;
+}
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 #game-board {
-  background-color: rgb(201, 186, 186);
+  /* background-color: rgb(201, 186, 186); */
+  background-color: rgba(255,255,255);
   border: 10px solid black;
   border-radius: 10px;
+  width: 500px;
+  height: 500px;  
 
 }

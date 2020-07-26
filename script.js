@@ -1,20 +1,26 @@
 class Game {
   constructor () {
-    const canvas = document.querySelector('#game-board')
-    const screen = canvas.getContext('2d')
-    const gameSize = { x: canvas.width, y: canvas.height }
-    this.size = gameSize.x
-    this.player = new Player(this, gameSize)
-    this.enemy = new Enemy(this, gameSize)
+    this.canvas = document.querySelector('#game-board')
+    this.screen = this.canvas.getContext('2d')
+    this.gameSize = { x: this.canvas.width, y: this.canvas.height }
+    this.gameOver = false
+    this.size = this.gameSize.x
+    this.player = new Player(this, this.gameSize)
+    this.enemy = new Enemy(this, this.gameSize)
     this.keyboarder = Keyboarder
-    this.enemyGrow = .5
+    this.enemyGrow = 0.5
     // this.updatedRadius = this.enemy.radius
-  
 
     const tick = () => {
       this.update()
-      this.draw(screen, gameSize)
-      requestAnimationFrame(tick)
+      if (!this.gameOver) {
+        this.draw(this.screen, this.gameSize)
+        requestAnimationFrame(tick)
+      } else {
+        cancelAnimationFrame(tick)
+        this.gameOverMessage()
+        this.restart()
+      }
     }
     tick()
   }
@@ -24,8 +30,7 @@ class Game {
     this.enemy.update()
     // distance(this.player, this.enemy)
     if (distance(this.player, this.enemy)) {
-      // console.log('colliding')
-      addMessage()
+      this.gameOver = true
     }
 
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
@@ -45,6 +50,32 @@ class Game {
     screen.clearRect(0, 0, gameSize.x, gameSize.y)
     drawCircle(screen, this.player)
     drawCircle(screen, this.enemy)
+  }
+
+  gameOverMessage () {
+    // this.player.move = () => { } // prevents the player from drawing over the overlay if arrow keys are pressed
+    this.screen.fillStyle = 'rgb(0, 0, 0)'
+    this.screen.fillRect(0, 0, this.gameSize.x, this.gameSize.y)
+    this.screen.fillStyle = 'rgba(255,255,255,1)'
+    this.screen.font = '5rem sans-serif'
+    this.screen.textAlign = 'center'
+    const textStart = 250
+    // this.screen.fillText(`You Scored: ${this.score}`, textStart, 150)
+    this.screen.fillText('NOW YOU', textStart, 180)
+    this.screen.fillText('ARE', textStart, 260)
+    this.screen.fillText('THE ABYSS', textStart, 340)
+    this.screen.font = '1.5rem sans-serif'
+    this.screen.fillText('Press enter to play again', textStart, 420)
+  }
+
+  restart () {
+    const callBack = (event) => {
+      if (event.key === 'Enter') {
+        window.removeEventListener('keydown', callBack)
+        new Game()
+      }
+    }
+    window.addEventListener('keydown', callBack)
   }
 }
 
@@ -72,7 +103,7 @@ class Enemy {
       this.speedY = -(Math.random() * this.speedY ) 
     } 
 
-    if (this.patrolY < (this.radius - (this.size.y/2)) || this.patrolY > this.gameSize.y - (this.size.y + (this.radius - (this.size.y/2)))) {
+    if (this.patrolY < (this.radius - (this.size.y / 2)) || this.patrolY > this.gameSize.y - (this.size.y + (this.radius - (this.size.y / 2)))) {
     // if (this.patrolY < 0 || this.patrolY > this.gameSize.y - this.size.y) {
       this.speedY = -this.speedY
       this.speedX = -(Math.random() * this.speedX)
@@ -128,16 +159,11 @@ function distance (player, enemy) {
   }
 }
 
-
-function drawRect (screen, body) {
-  screen.fillRect(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2,
-    body.size.x, body.size.y)
-}
-
 function drawCircle (screen, body) {
   screen.beginPath()
   screen.arc(body.center.x - body.size.x / 2, body.center.y - body.size.y / 2, body.radius, 0, Math.PI * 2, true)
   screen.stroke()
+  screen.fillStyle = 'black'
   screen.fill()
 }
 
@@ -165,8 +191,8 @@ function addMessage () {
 }
 
 function drawMessage (screen, message) {
-  screen.font = '30px Arial'
-  screen.fillText('message', 250, 250)
+  this.screen.font = '30px Arial'
+  this.screen.fillText('message', 250, 250)
 }
 // function create
 
